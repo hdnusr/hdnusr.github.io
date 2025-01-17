@@ -1,0 +1,161 @@
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #111;
+    margin: 0;
+    overflow: hidden;
+}
+
+#game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    position: relative;
+    flex-direction: row; /* Align items in a row */
+}
+
+canvas {
+    border: 4px solid #fff;
+    background-color: #222;
+    margin-right: 20px; /* Space between canvas and next piece container */
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Start Screen */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-content {
+    text-align: center;
+    color: white;
+}
+
+.start-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.start-content p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.start-content button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #FF5733;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.start-content button:hover {
+    background-color: #FF2D00;
+}
+
+/* Pause button */
+#pause-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #FF5733;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#pause-btn:hover {
+    background-color: #FF2D00;
+}
+
+/* Game Over Screen */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-over-content,
+.pause-content {
+    text-align: center;
+    color: white;
+}
+
+.game-over-content h1,
+.pause-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.game-over-content p,
+.pause-content p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.game-over-content button,
+.pause-content button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #FF5733;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.game-over-content button:hover,
+.pause-content button:hover {
+    background-color: #FF2D00;
+}
+#game-container {
+    display: flex;
+    flex-direction: row; /* Align children in a row */
+    justify-content: flex-start; /* Align items to the left */
+    align-items: flex-start; /* Align items to the top */
+    gap: 20px; /* Space between canvas and the next piece container */
+}
+
+#next-piece-container {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Prevent next piece box from shrinking */
+    position: fixed;
+    right: 500px;
+    top: 50%;
+}
+
+#next-piece {
+    border: 1px solid #444;
+    background-color: #111;
+    width: 120px; /* Adjust as needed */
+    height: 120px; /* Adjust as needed */
+}
