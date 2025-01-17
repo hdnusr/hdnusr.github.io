@@ -236,7 +236,7 @@ document.addEventListener('keydown', event => {
     }
 
     if (event.key === 'e') {
-        resetGame();
+        location.reload();
         return; // No further actions if "e" is pressed
     }
 
