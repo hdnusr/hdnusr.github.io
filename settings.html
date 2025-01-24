@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page</title>
+    <link rel="stylesheet" href="sources/style.css">
+    <style>
+           /* General Styles */
+           body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="settings-page">
+        <h1>Settings</h1>
+        <div class="setting">
+            <label>Dark Mode</label>
+            <label class="switch">
+                <input type="checkbox" class="checkbox" id="darkModeToggle">
+                <div class="slider"></div>
+            </label>
+        </div>
+        <div class="setting">
+            <label>Setting Two</label>
+            <label class="switch">
+                <input type="checkbox" class="checkbox">
+                <div class="slider"></div>
+            </label>
+        </div>
+        <div class="setting">
+            <label>Setting Three</label>
+            <label class="switch">
+                <input type="checkbox" class="checkbox">
+                <div class="slider"></div>
+            </label>
+        </div>
+        <div class="setting">
+            <label>Setting Four</label>
+            <label class="switch">
+                <input type="checkbox" class="checkbox">
+                <div class="slider"></div>
+            </label>
+        </div>
+    </div>
+
+    <script src="sources/settings.js"></script>
+</body>
+</html>
