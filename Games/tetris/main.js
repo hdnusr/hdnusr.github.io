@@ -19,6 +19,7 @@ const COLORS = [
     '#0000FF', // L piece - Orange
     '#800080'  // T piece - Purple
 ];
+let lastPieces = []; // To store the indices of the last two pieces
 
 const tetrominos = [
     [[1, 1, 1, 1]], // I
@@ -72,7 +73,8 @@ function resetGame() {
     gameSpeed = 500; // Reset speed
     isGameOver = false;
     isPaused = false;
-    nextPiece = generateRandomPiece();
+    lastPieces = []; // Reset the last pieces array
+    nextPiece = generateRandomPiece(); // Generate the first next piece
     spawnPiece();
     gameInterval = setInterval(update, gameSpeed);
 
@@ -122,14 +124,29 @@ function draw() {
 
 // Generate a random piece
 function generateRandomPiece() {
-    const randomIndex = Math.floor(Math.random() * tetrominos.length);
+    let randomIndex;
+    let count = 0;
+
+    do {
+        randomIndex = Math.floor(Math.random() * tetrominos.length);
+        count = lastPieces.filter(index => index === randomIndex).length; // Count occurrences of the same piece in `lastPieces`
+    } while (count >= 2); // Allow up to two of the same piece
+
+    // Update the lastPieces array
+    lastPieces.push(randomIndex);
+    if (lastPieces.length > 3) { // Keep track of the last three pieces for comparison
+        lastPieces.shift(); // Remove the oldest piece
+    }
+
     return {
         shape: tetrominos[randomIndex],
         color: COLORS[randomIndex],
     };
 }
+
+
 function spawnPiece() {
-    currentPiece = generateRandomPiece();
+    currentPiece = generateRandomPiece(); // Generates a new piece while respecting the `lastPieces` logic
     currentPosition = { x: 4, y: 0 };
 
     // Check if the new piece collides with the top of the board
@@ -137,6 +154,7 @@ function spawnPiece() {
         gameOver();
     }
 }
+
 // Move the current piece down by one block
 function moveDown() {
     if (canMove(0, 1)) {
