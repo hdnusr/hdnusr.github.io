@@ -376,7 +376,6 @@ document.addEventListener('keydown', event => {
                 showPauseScreen();
             } else {
                 pauseScreen.style.display = 'none';
-                document.getElementById('game-container').style.display = 'block';
             }
         }
         return;
