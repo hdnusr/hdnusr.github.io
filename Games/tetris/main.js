@@ -311,13 +311,9 @@ function gameOver() {
 function showGameOverScreen() {
 	gameOverScreen.style.display = 'flex';
 	finalScore.textContent = `Score: ${score}`;
-	document.getElementById('game-container').style.display = 'none';
-}
 
 function showPauseScreen() {
 	pauseScreen.style.display = 'flex';
-	document.getElementById('game-container').style.display = 'none';
-}
 
 function update() {
 	if (!isGameOver && !isPaused) {
