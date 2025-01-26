@@ -13,7 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start; /* Align items to the top */
-    position: relative;
+    position: fixed;
     flex-direction: row; /* Align items in a row */
 }
 
