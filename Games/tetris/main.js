@@ -119,41 +119,91 @@ const musicTracks = [
 // ============================
 //  Music
 // ============================
+
 let currentMusic;
+let recentSongs = [];
 
 musicTracks.forEach(track => {
-	track.loop = true;
+	track.loop = false; // Ensure the music does not loop so we can control it
 	track.volume = 0.5;
+
+	// Event listener to trigger when the song ends
+	track.addEventListener('ended', () => {
+		playNextSong();
+	});
 });
 
 // ============================
 //  Functions
 // ============================
 
-function resetGame() {
-    board = Array.from({ length: ROWS }, () => Array(COLUMNS).fill(null));
-    score = 0;
-    document.getElementById('score').textContent = `Score: ${score}`;
-    isGameOver = false;
-    isPaused = false;
-    lastPieces = [];
-    nextPiece = generateRandomPiece(); // Initialize next piece
-    spawnPiece();
-    gameInterval = setInterval(update, gameSpeed);
+function playNextSong() {
+    try {
+        const availableSongs = musicTracks.filter(
+            (track, index) => !recentSongs.includes(index)
+        );
 
-    gameOverScreen.style.display = 'none';
-    pauseScreen.style.display = 'none';
-    startScreen.style.display = 'none';
-    document.getElementById('game-container').style.display = 'flex';
+        if (availableSongs.length === 0) {
+            console.warn("No available songs to play.");
+            return;
+        }
 
-    if (currentMusic) {
-        currentMusic.pause();
+        const nextIndex = Math.floor(Math.random() * availableSongs.length);
+        const nextSongIndex = musicTracks.indexOf(availableSongs[nextIndex]);
+
+        recentSongs.push(nextSongIndex);
+        if (recentSongs.length > 2) {
+            recentSongs.shift(); // Keep only the last two songs
+        }
+
+        if (currentMusic) {
+            currentMusic.pause();
+            currentMusic.currentTime = 0;
+        }
+
+        currentMusic = musicTracks[nextSongIndex];
         currentMusic.currentTime = 0;
+        currentMusic.play();
+    } catch (error) {
+        console.error(`Error playing next song: ${error.message}`);
     }
+}
 
-    currentMusic = musicTracks[Math.floor(Math.random() * musicTracks.length)];
-    currentMusic.currentTime = 0;
-    currentMusic.play();
+function playAudio(audio) {
+    try {
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    } catch (error) {
+        console.error(`Error playing audio: ${error.message}`);
+    }
+}
+
+function resetGame() {
+    try {
+		clearInterval(gameInterval);
+        board = Array.from({ length: ROWS }, () => Array(COLUMNS).fill(null));
+        score = 0;
+        document.getElementById('score').textContent = `Score: ${score}`;
+        isGameOver = false;
+        isPaused = false;
+        lastPieces = [];
+        nextPiece = generateRandomPiece();
+
+        spawnPiece();
+        gameInterval = setInterval(update, gameSpeed);
+
+        gameOverScreen.style.display = 'none';
+        pauseScreen.style.display = 'none';
+        startScreen.style.display = 'none';
+        document.getElementById('game-container').style.display = 'flex';
+
+        recentSongs = [];
+        playNextSong();
+    } catch (error) {
+        console.error(`Error resetting game: ${error.message}`);
+    }
 }
 
 function draw() {
@@ -216,18 +266,23 @@ function spawnPiece() {
 }
 
 function moveDown() {
-	if (canMove(0, 1)) {
-		currentPosition.y++;
-	} else {
-		placePiece();
-		checkForLines();
-		if (isGameOver) {
-			clearInterval(gameInterval);
-			showGameOverScreen();
-		} else {
-			spawnPiece();
-		}
-	}
+    try {
+        if (canMove(0, 1)) {
+            currentPosition.y++;
+        } else {
+            placePiece();
+            checkForLines();
+            if (isGameOver) {
+                clearInterval(gameInterval);
+                showGameOverScreen();
+            } else {
+                spawnPiece();
+            }
+        }
+    } catch (error) {
+        console.error(`Error moving piece down: ${error.message}`);
+        gameOver();
+    }
 }
 
 function movePiece(dir) {
@@ -298,14 +353,18 @@ function checkForLines() {
 }
 
 function gameOver() {
-	isGameOver = true;
-	clearInterval(gameInterval);
-	showGameOverScreen();
+    try {
+        isGameOver = true;
+        clearInterval(gameInterval);
+        showGameOverScreen();
 
-	if (currentMusic) {
-		currentMusic.pause();
-		currentMusic.currentTime = 0;
-	}
+        if (currentMusic) {
+            currentMusic.pause();
+            currentMusic.currentTime = 0;
+        }
+    } catch (error) {
+        console.error(`Error during game over: ${error.message}`);
+    }
 }
 
 function showGameOverScreen() {
@@ -318,10 +377,15 @@ function showPauseScreen() {
 }
 
 function update() {
-	if (!isGameOver && !isPaused) {
-		moveDown();
-		draw();
-	}
+    try {
+        if (!isGameOver && !isPaused) {
+            moveDown();
+            draw();
+        }
+    } catch (error) {
+        console.error(`Error during game update: ${error.message}`);
+        gameOver();
+    }
 }
 
 function hardDrop() {
@@ -339,85 +403,105 @@ function hardDrop() {
     draw();
 }
 function drawNextPiece() {
-    // Clear the next piece canvas
-    nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+    try {
+        if (!validatePiece(nextPiece)) {
+            console.error("Invalid next piece. Skipping draw.");
+            return;
+        }
 
-    // Determine scaling for smaller tetrominos
-    const scale = BLOCK_SIZE * 0.8;
+        nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
 
-    // Center the piece in the canvas
-    const offsetX = (nextCanvas.width - nextPiece.shape[0].length * scale) / 2;
-    const offsetY = (nextCanvas.height - nextPiece.shape.length * scale) / 2;
+        const scale = BLOCK_SIZE * 0.8;
+        const offsetX = (nextCanvas.width - nextPiece.shape[0].length * scale) / 2;
+        const offsetY = (nextCanvas.height - nextPiece.shape.length * scale) / 2;
 
-    // Draw the next piece
-    nextPiece.shape.forEach((row, rIndex) => {
-        row.forEach((cell, cIndex) => {
-            if (cell) {
-                nextContext.fillStyle = nextPiece.color;
-                nextContext.fillRect(
-                    offsetX + cIndex * scale,
-                    offsetY + rIndex * scale,
-                    scale,
-                    scale
-                );
-            }
+        nextPiece.shape.forEach((row, rIndex) => {
+            row.forEach((cell, cIndex) => {
+                if (cell) {
+                    nextContext.fillStyle = nextPiece.color;
+                    nextContext.fillRect(
+                        offsetX + cIndex * scale,
+                        offsetY + rIndex * scale,
+                        scale,
+                        scale
+                    );
+                }
+            });
         });
-    });
+    } catch (error) {
+        console.error(`Error drawing next piece: ${error.message}`);
+    }
 }
 
+function validatePiece(piece) {
+    if (!piece || !piece.shape || !piece.color) {
+        console.error("Invalid piece encountered:", piece);
+        return false;
+    }
+    return true;
+}
 
 // ============================
 //  Key Listener
 // ============================
 
 document.addEventListener('keydown', event => {
-    if (event.key === 'e') {
-        if (!isGameOver && startScreen.style.display === 'none') {
-            isPaused = !isPaused;
-            if (isPaused) {
-                showPauseScreen();
-            } else {
-                pauseScreen.style.display = 'none';
+    try {
+        if (event.key === 'e') {
+            if (!isGameOver && startScreen.style.display === 'none') {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    showPauseScreen();
+                } else {
+                    pauseScreen.style.display = 'none';
+                }
             }
+            return;
         }
-        return;
-    }
 
-    if (event.key === 'r') {
-        location.reload();
-        return;
-    }
-    if (isGameOver || isPaused) return;
+        if (event.key === 'r') {
+            try {
+				resetGame();
+            } catch (error) {
+                console.error(`Failed to reload page: ${error.message}`);
+            }
+            return;
+        }
 
-    if (event.key === 's') {
-        if (!isSKeyPressed) {
-            isSKeyPressed = true;
-            fastFallInterval = setInterval(() => {
-                moveDown();
-                draw();
-            }, 50);
+        if (isGameOver || isPaused) return;
+
+        if (event.key === 's') {
+            if (!isSKeyPressed) {
+                isSKeyPressed = true;
+                fastFallInterval = setInterval(() => {
+                    moveDown();
+                    draw();
+                }, 50);
+            }
+        } else if (event.key === 'a') {
+            if (!isLeftKeyPressed) {
+                isLeftKeyPressed = true;
+                moveLeftInterval = setInterval(() => {
+                    movePiece(-1);
+                    draw();
+                }, sideToSideInterval);
+            }
+        } else if (event.key === 'd') {
+            if (!isRightKeyPressed) {
+                isRightKeyPressed = true;
+                moveRightInterval = setInterval(() => {
+                    movePiece(1);
+                    draw();
+                }, sideToSideInterval);
+            }
+        } else if (event.key === 'w') {
+            rotatePiece();
+            draw();
+        } else if (event.key === 'q') {
+            hardDrop();
         }
-    } else if (event.key === 'a') {
-        if (!isLeftKeyPressed) {
-            isLeftKeyPressed = true;
-            moveLeftInterval = setInterval(() => {
-                movePiece(-1);
-                draw();
-            }, sideToSideInterval); // Adjust interval for desired speed
-        }
-    } else if (event.key === 'd') {
-        if (!isRightKeyPressed) {
-            isRightKeyPressed = true;
-            moveRightInterval = setInterval(() => {
-                movePiece(1);
-                draw();
-            }, sideToSideInterval); // Adjust interval for desired speed
-        }
-    } else if (event.key === 'w') {
-        rotatePiece();
-        draw();
-    } else if (event.key === 'q') {
-        hardDrop();
+    } catch (error) {
+        console.error(`Error handling key press: ${error.message}`);
     }
 });
 
@@ -441,3 +525,17 @@ document.addEventListener('keyup', event => {
 startBtn.addEventListener('click', () => {
 	resetGame();
 });
+
+// ============================
+//  Error Handling
+// ============================
+
+if (!canvas || !context) {
+    console.error("Canvas or context could not be initialized.");
+    throw new Error("Canvas or context could not be initialized.");
+}
+
+if (!nextCanvas || !nextContext) {
+    console.error("Next canvas or context could not be initialized.");
+    throw new Error("Next canvas or context could not be initialized.");
+}
