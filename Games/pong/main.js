@@ -153,21 +153,28 @@ function moveBall() {
         ball.dy = -ball.dy;
     }
 
-    // Ball collision with paddles
+    // Ball collision with left paddle
     if (
         ball.x < leftPaddle.x + leftPaddle.width && 
         ball.y + ball.size > leftPaddle.y && 
         ball.y < leftPaddle.y + leftPaddle.height
     ) {
         ball.dx = -ball.dx;
+
+        // Add random angle to the ball's direction after hitting left paddle
+        ball.dy += (Math.random() - 0.5) * 5;  // Randomize vertical speed within a range
     }
 
+    // Ball collision with right paddle
     if (
         ball.x + ball.size > rightPaddle.x && 
         ball.y + ball.size > rightPaddle.y && 
         ball.y < rightPaddle.y + rightPaddle.height
     ) {
         ball.dx = -ball.dx;
+
+        // Add random angle to the ball's direction after hitting right paddle
+        ball.dy += (Math.random() - 0.5) * 5;  // Randomize vertical speed within a range
     }
 
     // Ball out of bounds (score)
@@ -185,7 +192,6 @@ function moveBall() {
         waitingForSpace = true;  // Wait for Space to continue
     }
 }
-
 // Reset ball to center after a point
 function resetBall() {
     ball.x = canvas.width / 2;
