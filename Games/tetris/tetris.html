@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MGN - Tetris</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="start-screen" class="overlay">
+        <div class="start-content">
+            <h1>Tetris</h1>
+            <p>Press H to go to home screen</p>
+            <p>Click below to start the game!</p>
+            <button id="start-btn">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+<div id="game-container" style="display:none;">
+    <div id="instructions">
+        <h3>Key Instructions</h3>
+        <ul>
+            <li><b>W</b> - Rotate Piece</li>
+            <li><b>A</b> - Move Left</li>
+            <li><b>D</b> - Move Right</li>
+            <li><b>S</b> - Fast Fall</li>
+            <li><b>Q</b> - Hard Drop</li>
+            <li><b>E</b> - Pause/Resume</li>
+            <li><b>R</b> - Reset Game</li>
+            <li><b>H</b> - Go back to home screen</li>
+        </ul>
+    </div>
+    <canvas id="tetris" width="300" height="600"></canvas>
+    <div id="sidebar">
+        <div id="score">Score: 0</div>
+        <div id="next-piece">
+            <h3>Next Piece</h3>
+            <canvas id="next-canvas" width="120" height="120"></canvas>
+        </div>
+    </div>
+</div>
+    
+    
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="overlay">
+        <div class="game-over-content">
+            <h1>Game Over!</h1>
+            <p id="final-score">Score: 0</p>
+            <p>Press R to reset</p>
+            <p>Press H to go to home screen</p>
+        </div>
+    </div>
+
+    <!-- Pause Screen -->
+    <div id="pause-screen" class="overlay">
+        <div class="pause-content">
+            <h1>Game Paused</h1>
+            <p>Press E to resume</p>
+            <p>Press H to go to home screen</p>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="../../sources/instahome.js"></script>
+</body>
+</html>

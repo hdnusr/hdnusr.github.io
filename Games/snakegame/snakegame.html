@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MGN - Snake</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class="game-container">
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <div class="scoreboard">
+        <h2>Score</h2>
+        <p id="scoreDisplay">0</p>
+    </div>
+    <div class="gameover-screen" id="gameOverScreen">
+        <h1>Game Over</h1>
+        <p id="finalScore">Final Score: 0</p>
+        <button onclick="restartGame()">Restart</button>
+    </div>
+</div>
+<script src='main.js'></script>
+<script src="../../sources/instahome.js"></script>
+</body>
+</html>

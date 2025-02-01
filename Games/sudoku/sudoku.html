@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blank Sudoku</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Blank Sudoku</h1>
+  <div class="timer" id="timer">Time: 00:00</div>
+  <div class="sudoku-container">
+    <div class="grid" id="sudoku-grid"></div>
+    <button id="check-sudoku">Check Sudoku</button>
+  </div>
+
+  <div class="end-screen" id="end-screen">
+    <div>Congratulations! You completed the Sudoku!</div>
+    <button onclick="resetGame()">Play Again</button>
+  </div>
+
+  <script src="main.js"></script>
+  <script src="../../sources/instahome.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Test</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+        .message {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">Wait for green...</div>
+
+    <script>
+        let startTime;
+        let gameStarted = false;
+
+        function startGame() {
+            const randomDelay = Math.random() * 7000 + 3000; // 3 to 10 seconds
+            setTimeout(() => {
+                document.body.style.backgroundColor = 'green';
+                document.querySelector('.message').textContent = 'Press SPACE now!';
+                startTime = new Date().getTime();
+                gameStarted = true;
+            }, randomDelay);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                if (!gameStarted) {
+                    alert('Too soon! Wait for green.');
+                    return;
+                }
+
+                const reactionTime = new Date().getTime() - startTime;
+                document.querySelector('.message').textContent = `Your reaction time: ${reactionTime} ms`;
+                document.body.style.backgroundColor = 'red';
+                gameStarted = false;
+                setTimeout(() => {
+                    document.querySelector('.message').textContent = 'Wait for green...';
+                    startGame();
+                }, 3000);
+            }
+        });
+
+        startGame();
+    </script>
+    <script src="../../sources/instahome.js"></script>
+</body>
+</html>

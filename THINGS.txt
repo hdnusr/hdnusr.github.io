@@ -1,0 +1,11 @@
+Tetris
+    Sean must infact make music for tetris
+        Multiple random sounds
+        Start Menu Music
+    Sean might have to make sound effects
+        Placing
+        Start Game Button Press
+        Line Clear
+        Game Over
+    Key Instructions
+    Next Block Box
